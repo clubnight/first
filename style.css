@@ -1,53 +1,321 @@
-body {
-    font-family: Georgia;
-    font-size: 16px;
-    margin: 0 auto;   /* center content */
-    max-width: 800px; /* limit width */
-    line-height: 1.5;
-    padding-top: 32px;
-    padding-bottom: 32px;
-  }
-  
-  /* BEGIN (write your solution here) */
-  
-  /* END */
-  p {
-    margin-bottom: 10px;
-  }
-  h1, h2, h3 {
-    font-weight: 400;
-  }
-  h1 {
-    font-size: 36px;
-    margin-bottom: 0;
-  }
-  h2 {
-    font-size: 32px;
-    margin-bottom: 8px;
-    border-bottom: 1px solid grey;
-  }
-  h2.header-title {
-    font-size: 18px;
-    margin-bottom: 10px;
-    border-bottom: none;
-  }
-  #header {
-    margin-bottom: 32px;
-    text-align: center;
-  }
-  #footer {
-    margin-top: 64px;
-    text-align: center;
+/**
+  Нормализация блочной модели
+ */
+ *,
+ ::before,
+ ::after {
+   box-sizing: border-box;
+ }
+ 
+ /**
+   Убираем внутренние отступы слева тегам списков,
+   у которых есть атрибут class
+  */
+ :where(ul, ol):where([class]) {
+   padding-left: 0;
+ }
+ 
+ /**
+   Убираем внешние отступы body и двум другим тегам,
+   у которых есть атрибут class
+  */
+ body,
+ :where(blockquote, figure):where([class]) {
+   margin: 0;
+ }
+ 
+ /**
+   Убираем внешние отступы вертикали нужным тегам,
+   у которых есть атрибут class
+  */
+ :where(
+   h1,
+   h2,
+   h3,
+   h4,
+   h5,
+   h6,
+   p,
+   ul,
+   ol,
+   dl
+ ):where([class]) {
+   margin-block: 0;
+ }
+ 
+ :where(dd[class]) {
+   margin-left: 0;
+ }
+ 
+ :where(fieldset[class]) {
+   margin-left: 0;
+   padding: 0;
+   border: none;
+ }
+ 
+ /**
+   Убираем стандартный маркер маркированному списку,
+   у которого есть атрибут class
+  */
+ :where(ul[class]) {
+   list-style: none;
+ }
+ 
+ :where(address[class]) {
+   font-style: normal;
+ }
+ 
+ /**
+   Обнуляем вертикальные внешние отступы параграфа,
+   объявляем локальную переменную для внешнего отступа вниз,
+   чтобы избежать взаимодействие с более сложным селектором
+  */
+ p {
+   --paragraphMarginBottom: 24px;
+ 
+   margin-block: 0;
+ }
+ 
+ /**
+   Внешний отступ вниз для параграфа без атрибута class,
+   который расположен не последним среди своих соседних элементов
+  */
+ p:where(:not([class]):not(:last-child)) {
+   margin-bottom: var(--paragraphMarginBottom);
+ }
+ 
+ 
+ /**
+   Упрощаем работу с изображениями
+  */
+ img {
+   display: block;
+   max-width: 100%;
+ }
+ 
+ /**
+   Наследуем свойства шрифт для полей ввода
+  */
+ input,
+ textarea,
+ select,
+ button {
+   font: inherit;
+ }
+ 
+ html {
+   /**
+     Пригодится в большинстве ситуаций
+     (когда, например, нужно будет "прижать" футер к низу сайта)
+    */
+   height: 100%;
+ }
+ 
+ /**
+   Плавный скролл
+  */
+ html,
+ :has(:target) {
+   scroll-behavior: smooth;
+ }
+ 
+ body {
+   /**
+     Пригодится в большинстве ситуаций
+     (когда, например, нужно будет "прижать" футер к низу сайта)
+    */
+   min-height: 100%;
+   /**
+     Унифицированный интерлиньяж
+    */
+   line-height: 1.5;
+ }
+ 
+ /**
+   Приводим к единому цвету svg-элементы
+  */
+ svg *[fill] { fill: currentColor }
+ svg *[stroke] { stroke: currentColor }
+ 
+ /**
+   Чиним баг задержки смены цвета при взаимодействии с svg-элементами
+  */
+ svg * {
+   transition-property: fill, stroke;
+ }
+ 
+ /**
+   Удаляем все анимации и переходы для людей,
+   которые предпочитают их не использовать
+  */
+ @media (prefers-reduced-motion: reduce) {
+   *,
+   ::before,
+   ::after {
+     animation-duration: 0.01ms !important;
+     animation-iteration-count: 1 !important;
+     transition-duration: 0.01ms !important;
+     scroll-behavior: auto !important;
    }
-    section p {
-      margin-top: -20px;
-    }
-    h4 {
-      margin-top: 0;
-    }
-    p.adress {
-      margin-top: -10px;
-    }
-      p.fio {
-          font-weight: 600;
-        }
+ }
+body {
+font-family: Arial, Helvetica, sans-serif;
+background: hwb(0 32% 67%) url(https://sutd.ru/images/news/SPb_Day.jpg);
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
+background-attachment: fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+padding: 0;
+margin: 0;
+background-blend-mode: multiply;
+}
+.nav {
+    display: flex;
+    list-style: none;
+    gap: 40px;
+    justify-content: center;
+    font-size: 20px;
+    margin: 50px;
+}
+.subnav {
+    display: none;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 16px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1;
+  }
+  .nav-item {
+    position: relative;
+  }
+  .subnav-link {
+    display: block;
+    padding: 8px 0px;
+    text-wrap: nowrap;
+  }
+  .nav-link {
+    display: block;
+  }
+  .nav-item:hover > .subnav {
+    display: block;
+  }  
+  .nav-item a {
+    display: inline-block;
+    color: hsl(0, 0%, 100%); /* Цвет обычной ссылки */
+    line-height: 1;
+    text-decoration: none; /* Убираем подчеркивание */
+    cursor: pointer;
+}
+.nav-item a:after {
+    background-color: hwb(0 83% 16%); /* Цвет линии при наведении на нее курсора мыши */
+    display: block;
+    content: "";
+    height: 2px; /* Высота линии */
+    width: 0%;
+    -webkit-transition: width .3s ease-in-out;
+    -moz--transition: width .3s ease-in-out;
+    transition: width .3s ease-in-out;
+}
+.nav-item a:hover:after,
+.nav-item a:focus:after {
+    width: 100%;
+}
+.second-flex {
+  display: flex;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  flex-direction: column;
+}
+#description {
+  font-size: 30px;
+  padding: 0px 10px;
+  color: #ffffff;
+  margin: 0px 0px;
+}
+.text {
+  font-size: 20px;
+  padding: 0px 10px;
+  color: hsl(0, 6%, 76%);  
+  margin: 0px 0px;
+}
+.photo {
+  display: flex;
+  margin: 200px 50px 0px 0px;
+  justify-content: space-around;
+}
+.photo1 {
+  width: 450px;
+  height: auto;
+  object-fit: cover;
+  transform: rotate(15deg);
+}
+.photo2 {
+  width: 450px;
+  height: auto;
+  object-fit: cover;
+  margin-left: -140px;
+  transform: rotate(-15deg);
+  z-index: 2;
+}
+.photo3 {
+  width: 450px;
+  height: auto;
+  object-fit: cover;
+  margin-left: -280px;
+  margin-top: 90px;
+  transform: rotate(9deg);
+  z-index: 4;
+}
+.photo4 {
+  width: 450px;
+  height: auto;
+  object-fit: cover;
+}
+.polaroid {
+  position: relative;
+  width: 220px;
+ }
+ .polaroid img {
+  border: 10px solid #d2d2d2;
+  border-bottom: 45px solid #d2d2d2;
+  -webkit-box-shadow: 3px 3px 3px #777;
+  -moz-box-shadow: 3px 3px 3px #777;
+  box-shadow: 3px 3px 3px #777;
+ }
+ .polaroid p.name1 {
+  position: absolute;
+  width: 100%;
+  bottom: 55px;
+  left: -30px;
+  font: 600 16px 'Kaushan Script', cursive;
+  color: hsl(0, 0%, 33%);
+  transform: rotate(15deg);
+  z-index: 1;
+ }
+ .polaroid p.name2 {
+  position: absolute;
+  width: 100%;
+  bottom: 105px;
+  left: -95px;
+  font: 600 16px 'Kaushan Script', cursive;
+  color: hsl(0, 0%, 33%);
+  z-index: 3;
+  transform: rotate(-15deg);
+ }
+ .polaroid p.name3 {
+  position: absolute;
+  width: 100%;
+  bottom: 65px;
+  left: -95px;
+  font: 600 16px 'Kaushan Script', cursive;
+  color: hsl(0, 0%, 33%);
+  z-index: 3;
+  transform: rotate(-15deg);
+ }
+ 
