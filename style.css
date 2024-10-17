@@ -318,4 +318,13 @@ background-blend-mode: multiply;
   z-index: 3;
   transform: rotate(-15deg);
  }
- 
+@media (max-width: 700px) {
+  .nav {
+  font-size: 20px;
+  flex-direction: repeat(3, 1fr);
+  flex-wrap: wrap;
+}
+  .photo {
+    display: none;
+  }
+}
